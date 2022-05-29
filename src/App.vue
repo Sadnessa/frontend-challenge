@@ -161,8 +161,12 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 body {
   margin: 0px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
 }
 </style>
 
@@ -176,7 +180,7 @@ body {
   .header {
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2;
   }
   .content {
     display: flex;
