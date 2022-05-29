@@ -1,8 +1,26 @@
 <template>
   <div class="main-page">
     <Header :tabs="tabs" :activeTab="currentTab" @tabClick="onTabClick" />
-    <div class="content">
-      <CatCard v-for="(cat, i) in cats" :key="i" :image="cat.url"/>
+    <div class="content content__all" v-if="currentTab == 'Все котики'">
+      <CatCard
+        v-for="(cat, i) in allCats"
+        :key="i"
+        :cat="cat"
+        @heartClick="onHeartClick"
+        :isFeatured="isCatFeatured(cat)"
+      />
+    </div>
+    <div class="content content__featured" v-else>
+      <CatCard
+        v-for="(cat, i) in featuredCats"
+        :key="i"
+        :cat="cat"
+        @heartClick="onHeartClick"
+        :isFeatured="isCatFeatured(cat)"
+      />
+    </div>
+    <div class="load" v-if="isLoading">
+      <p>...загружаем еще котиков...</p>
     </div>
   </div>
 </template>
@@ -10,7 +28,7 @@
 <script>
 import Header from "./components/Header.vue";
 import CatCard from "./components/CatCard.vue";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   components: {
@@ -20,32 +38,39 @@ export default {
 
   data() {
     return {
-      cats: [],
+      allCats: [],
+      featuredCats: [],
       tabs: ["Все котики", "Любимые котики"],
       currentTab: "Все котики",
+      isLoading: false,
     };
   },
 
   created() {
-    this.loadNextImage();
+    this.loadImages();
+  },
+
+  mounted() {
+    window.addEventListener("scroll", () => {
+      let scrollMaxY = document.body.scrollHeight;
+      if (window.scrollY + window.innerHeight + 10 >= scrollMaxY) {
+        this.loadNewCats();
+      }
+    });
   },
 
   methods: {
-    async loadNextImage() {
+    async loadImages() {
       try {
-        axios.defaults.headers.common["x-api-key"] = "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66"; // Replace this with your API Key
+        axios.defaults.headers.common["x-api-key"] =
+          "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66"; // Replace this with your API Key
 
         let response = await axios.get(
           "https://api.thecatapi.com/v1/images/search",
-          { params: { limit: 10, } }
+          { params: { limit: 15 } }
         ); // Ask for 1 Image, at full resolution
 
-        this.cats = response.data; // the response is an Array, so just use the first item as the Image
-
-        console.log("-- Image from TheCatAPI.com");
-        console.log("id:", this.cats.id);
-        console.log("url:", this.cats.url);
-        console.log(response)
+        this.allCats = response.data; // the response is an Array, so just use the first item as the Image
       } catch (err) {
         console.log(err);
       }
@@ -53,6 +78,44 @@ export default {
 
     onTabClick(i) {
       this.currentTab = i;
+    },
+
+    onHeartClick(cat) {
+      if (this.isCatFeatured(cat)) {
+        this.featuredCats = this.featuredCats.filter((c) => {
+          return c !== cat;
+        });
+      } else {
+        this.featuredCats.push(cat);
+      }
+    },
+
+    isCatFeatured(cat) {
+      return Boolean(this.featuredCats.find((c) => c.id === cat.id));
+    },
+
+    async loadNewCats() {
+      if (this.isLoading) {
+        return;
+      }
+
+      try {
+        axios.defaults.headers.common["x-api-key"] =
+          "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66"; // Replace this with your API Key
+
+        this.isLoading = true;
+
+        let response = await axios.get(
+          "https://api.thecatapi.com/v1/images/search",
+          { params: { limit: 15 } }
+        ); // Ask for 1 Image, at full resolution
+
+        this.allCats.push(...response.data); // the response is an Array, so just use the first item as the Image
+      } catch (err) {
+        console.log(err);
+      }
+
+      this.isLoading = false
     },
   },
 };
@@ -66,12 +129,26 @@ body {
 
 <style lang="scss" scoped>
 .main-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // overflow-x: hidden;
+  
   .header {
     position: sticky;
+    top: 0;
+    z-index: 1;
   }
   .content {
     display: flex;
-    padding: 48px 62px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 24px 38px;
+
+    .cat-card {
+      margin: 12px;
+    } 
   }
 }
 </style>

@@ -31,10 +31,12 @@ export default {
 <style lang="scss" scoped>
 .header {
   display: flex;
+  width: 100%;
   height: 64px;
   background: #2196F3;
   padding-left: 62px;
   box-shadow: 0px 4px 4px 0px #0000003D;
+  box-sizing: border-box;
 
   .tab {
     display: flex;
