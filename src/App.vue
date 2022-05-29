@@ -54,25 +54,40 @@ export default {
   },
 
   mounted() {
+    //scroll loading feature
     window.addEventListener("scroll", () => {
       let scrollMaxY = document.body.scrollHeight;
       if (window.scrollY + window.innerHeight + 10 >= scrollMaxY) {
         this.loadNewCats();
       }
     });
+
+    if (localStorage.getItem("featuredCats")) {
+      this.featuredCats =
+        JSON.parse(localStorage.getItem("featuredCats")) || [];
+    }
+  },
+
+  watch: {
+    featuredCats: {
+      handler(newValue) {
+        localStorage.setItem("featuredCats", JSON.stringify(newValue));
+      },
+      deep: true,
+    },
   },
 
   methods: {
     async loadImages() {
       try {
         axios.defaults.headers.common["x-api-key"] =
-          "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66"; 
+          "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66";
 
         let response = await axios.get(
           "https://api.thecatapi.com/v1/images/search",
           { params: { limit: 15 } }
-        ); 
-        this.allCats = response.data; 
+        );
+        this.allCats = response.data;
       } catch (err) {
         console.log(err);
       }
@@ -103,21 +118,21 @@ export default {
 
       try {
         axios.defaults.headers.common["x-api-key"] =
-          "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66"; 
+          "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66";
 
         this.isLoading = true;
 
         let response = await axios.get(
           "https://api.thecatapi.com/v1/images/search",
           { params: { limit: 15 } }
-        ); 
+        );
 
-        this.allCats.push(...response.data); 
+        this.allCats.push(...response.data);
       } catch (err) {
         console.log(err);
       }
 
-      this.isLoading = false
+      this.isLoading = false;
     },
   },
 };
@@ -135,7 +150,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   .header {
     position: sticky;
     top: 0;
@@ -149,7 +164,7 @@ body {
 
     .cat-card {
       margin: 12px;
-    } 
+    }
   }
 }
 </style>
