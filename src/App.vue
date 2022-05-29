@@ -1,10 +1,8 @@
 <template>
   <div class="main-page">
     <Header :tabs="tabs" :activeTab="currentTab" @tabClick="onTabClick" />
+
     <div class="content content__all" v-if="currentTab == 'Все котики'">
-      <div class="load-page" v-if="isLoadingPage">
-        <Loader/>
-      </div>
       <CatCard
         v-for="(cat, i) in allCats"
         :key="i"
@@ -27,8 +25,12 @@
     </div>
     <div class="load-cats" v-if="isLoadingCats">
       <p>...загружаем еще котиков...</p>
-      <Loader/>
+      <Loader />
     </div>
+  </div>
+
+  <div class="load-page" v-if="isLoadingPage">
+    <Loader />
   </div>
 </template>
 
@@ -37,7 +39,7 @@ import axios from "axios";
 
 import Header from "./components/Header.vue";
 import CatCard from "./components/CatCard.vue";
-import Loader from "./components/Loader.vue"
+import Loader from "./components/Loader.vue";
 
 export default {
   components: {
@@ -72,7 +74,8 @@ export default {
 
     //local storage for featured cats
     if (localStorage.getItem("featuredCats")) {
-      this.featuredCats = JSON.parse(localStorage.getItem("featuredCats")) || [];
+      this.featuredCats =
+        JSON.parse(localStorage.getItem("featuredCats")) || [];
     }
   },
 
@@ -163,6 +166,13 @@ body {
 </style>
 
 <style lang="scss" scoped>
+.load-page {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  transform: translateX(-50%);
+}
 .main-page {
   position: relative;
   display: flex;
@@ -182,6 +192,18 @@ body {
 
     .cat-card {
       margin: 12px;
+    }
+  }
+
+  .load-cats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+
+    p {
+      margin: 0px;
+      margin-bottom: 20px;
     }
   }
 }
