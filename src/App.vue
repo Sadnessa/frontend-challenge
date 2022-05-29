@@ -2,6 +2,9 @@
   <div class="main-page">
     <Header :tabs="tabs" :activeTab="currentTab" @tabClick="onTabClick" />
     <div class="content content__all" v-if="currentTab == 'Все котики'">
+      <div class="load-page" v-if="isLoadingPage">
+        <Loader/>
+      </div>
       <CatCard
         v-for="(cat, i) in allCats"
         :key="i"
@@ -12,7 +15,7 @@
     </div>
     <div class="content content__featured" v-else>
       <div class="notification" v-if="featuredCats.length == 0">
-        Нужно добавить любимых котиков!
+        <p>Нужно добавить любимых котиков!</p>
       </div>
       <CatCard
         v-for="(cat, i) in featuredCats"
@@ -22,21 +25,25 @@
         :isFeatured="isCatFeatured(cat)"
       />
     </div>
-    <div class="load" v-if="isLoading">
+    <div class="load-cats" v-if="isLoadingCats">
       <p>...загружаем еще котиков...</p>
+      <Loader/>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 import Header from "./components/Header.vue";
 import CatCard from "./components/CatCard.vue";
-import axios from "axios";
+import Loader from "./components/Loader.vue"
 
 export default {
   components: {
     Header,
     CatCard,
+    Loader,
   },
 
   data() {
@@ -45,7 +52,8 @@ export default {
       featuredCats: [],
       tabs: ["Все котики", "Любимые котики"],
       currentTab: "Все котики",
-      isLoading: false,
+      isLoadingCats: false,
+      isLoadingPage: false,
     };
   },
 
@@ -62,12 +70,13 @@ export default {
       }
     });
 
+    //local storage for featured cats
     if (localStorage.getItem("featuredCats")) {
-      this.featuredCats =
-        JSON.parse(localStorage.getItem("featuredCats")) || [];
+      this.featuredCats = JSON.parse(localStorage.getItem("featuredCats")) || [];
     }
   },
 
+  //local storage for featured cats
   watch: {
     featuredCats: {
       handler(newValue) {
@@ -79,18 +88,27 @@ export default {
 
   methods: {
     async loadImages() {
+      if (this.isLoadingPage) {
+        return;
+      }
+
       try {
         axios.defaults.headers.common["x-api-key"] =
           "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66";
+
+        this.isLoadingPage = true;
 
         let response = await axios.get(
           "https://api.thecatapi.com/v1/images/search",
           { params: { limit: 15 } }
         );
-        this.allCats = response.data;
+
+        this.allCats.push(...response.data);
       } catch (err) {
         console.log(err);
       }
+
+      this.isLoadingPage = false;
     },
 
     onTabClick(i) {
@@ -112,7 +130,7 @@ export default {
     },
 
     async loadNewCats() {
-      if (this.isLoading) {
+      if (this.isLoadingCats) {
         return;
       }
 
@@ -120,7 +138,7 @@ export default {
         axios.defaults.headers.common["x-api-key"] =
           "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66";
 
-        this.isLoading = true;
+        this.isLoadingCats = true;
 
         let response = await axios.get(
           "https://api.thecatapi.com/v1/images/search",
@@ -132,7 +150,7 @@ export default {
         console.log(err);
       }
 
-      this.isLoading = false;
+      this.isLoadingCats = false;
     },
   },
 };
