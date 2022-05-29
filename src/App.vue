@@ -13,7 +13,8 @@
     </div>
     <div class="content content__featured" v-else>
       <div class="notification" v-if="featuredCats.length == 0">
-        <p>Нужно добавить любимых котиков!</p>
+        <p>Коллекция любимых котиков не найдена.</p>
+        <p>:с</p>
       </div>
       <CatCard
         v-for="(cat, i) in featuredCats"
@@ -166,13 +167,6 @@ body {
 </style>
 
 <style lang="scss" scoped>
-.load-page {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateY(-50%);
-  transform: translateX(-50%);
-}
 .main-page {
   position: relative;
   display: flex;
@@ -204,6 +198,32 @@ body {
     p {
       margin: 0px;
       margin-bottom: 20px;
+    }
+  }
+}
+
+.load-page {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  transform: translateX(-50%);
+}
+
+.notification {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  left: 50%;
+  top: 350%;
+  transform: translateX(-50%);
+
+  * {
+    margin: 0px;
+
+    &:first-child {
+      margin-bottom: 10px;
     }
   }
 }
