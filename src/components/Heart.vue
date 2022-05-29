@@ -21,6 +21,8 @@ export default {
 .heart-img {
   * {
     position: absolute;
+    transition: all ease-in-out 0.3s;
+    user-select: none;
   }
   .default {
     opacity: 1;

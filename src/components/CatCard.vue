@@ -71,11 +71,7 @@ export default {
     left: 0;
     width: 100%;
     height: 94px;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0) 0%,
-      #ffffff 58.85%
-    );
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 58.85%);
     opacity: 0;
     transition: all ease-in-out 0.2s;
   }
@@ -83,6 +79,7 @@ export default {
   &:hover {
     box-shadow: 0px 9px 18px 0px #0000002e;
     box-shadow: 0px 6px 5px 0px #0000003d;
+    transition: all ease-in-out 0.2s;
 
     &::after {
       opacity: 1;
