@@ -66,14 +66,13 @@ export default {
     async loadImages() {
       try {
         axios.defaults.headers.common["x-api-key"] =
-          "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66"; // Replace this with your API Key
+          "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66"; 
 
         let response = await axios.get(
           "https://api.thecatapi.com/v1/images/search",
           { params: { limit: 15 } }
-        ); // Ask for 1 Image, at full resolution
-
-        this.allCats = response.data; // the response is an Array, so just use the first item as the Image
+        ); 
+        this.allCats = response.data; 
       } catch (err) {
         console.log(err);
       }
@@ -104,16 +103,16 @@ export default {
 
       try {
         axios.defaults.headers.common["x-api-key"] =
-          "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66"; // Replace this with your API Key
+          "fbcc2541-6b27-4b7b-82f3-9b72d7a5da66"; 
 
         this.isLoading = true;
 
         let response = await axios.get(
           "https://api.thecatapi.com/v1/images/search",
           { params: { limit: 15 } }
-        ); // Ask for 1 Image, at full resolution
+        ); 
 
-        this.allCats.push(...response.data); // the response is an Array, so just use the first item as the Image
+        this.allCats.push(...response.data); 
       } catch (err) {
         console.log(err);
       }
@@ -136,7 +135,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  // overflow-x: hidden;
   
   .header {
     position: sticky;

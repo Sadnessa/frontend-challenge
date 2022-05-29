@@ -3,9 +3,9 @@
     <div class="img-wrapper">
       <img class="cat-image" :src="cat.url" />
     </div>
-    
-    <Heart :isClicked="isFeatured" @click="$emit('heartClick', cat)"/>
-    <slot/>
+
+    <Heart :isClicked="isFeatured" @click="$emit('heartClick', cat)" />
+    <slot />
   </div>
 </template>
 
@@ -25,7 +25,7 @@ export default {
     isFeatured: {
       type: Boolean,
       default: false,
-    }
+    },
   },
 };
 </script>
@@ -39,21 +39,19 @@ export default {
 
   .img-wrapper {
     width: 225px;
-  height: 225px;
-     overflow: hidden;
-     outline: white 16px solid;
-      
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 225px;
+    overflow: hidden;
+    outline: white 16px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .cat-image {
-    max-width: 150%;
-    max-height: 150%; 
+    max-width: 180%;
+    max-height: 180%;
     min-height: 100%;
     object-fit: cover;
-    
   }
 
   .heart-img {
