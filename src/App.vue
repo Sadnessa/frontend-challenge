@@ -11,6 +11,9 @@
       />
     </div>
     <div class="content content__featured" v-else>
+      <div class="notification" v-if="featuredCats.length == 0">
+        Нужно добавить любимых котиков!
+      </div>
       <CatCard
         v-for="(cat, i) in featuredCats"
         :key="i"
