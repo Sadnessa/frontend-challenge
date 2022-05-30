@@ -166,7 +166,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 body {
@@ -225,7 +225,6 @@ body {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    // padding: 24px 38px;
   }
 
   .load-cats {
@@ -267,7 +266,7 @@ body {
   }
 }
 
-
+//animations
 //1
 .fade-main-enter-active,
 .fade-main-leave-active {
@@ -311,5 +310,4 @@ body {
   position: absolute;
   transform: translateX(30px);
 }
-
 </style>
