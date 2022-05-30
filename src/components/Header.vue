@@ -37,7 +37,7 @@ export default {
 .header {
   display: flex;
   width: 100%;
-  height: 64px;
+  min-height: 64px;
   background: #2196f3;
   padding-left: 62px;
   box-shadow: 0px 4px 4px 0px #0000003d;

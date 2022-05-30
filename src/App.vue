@@ -1,36 +1,39 @@
 <template>
-<Transition name="fade-main" appear>
-  <div class="main-page">
-    <Header :tabs="tabs" :activeTab="currentTab" @tabClick="onTabClick" />
-    <Transition name="fade" mode="out-in">
-    <div class="content content__all" v-if="currentTab == 'Все котики'">
-      <CatCard
-        v-for="(cat, i) in allCats"
-        :key="i"
-        :cat="cat"
-        @heartClick="onHeartClick"
-        :isFeatured="isCatFeatured(cat)"
-      />
-    </div>
-    <div class="content content__featured" v-else>
-      <div class="notification" v-if="featuredCats.length == 0">
-        <p>Коллекция любимых котиков не найдена.</p>
-        <p>:с</p>
+  <Transition name="fade-main" appear>
+    <div class="main-page">
+      <Header :tabs="tabs" :activeTab="currentTab" @tabClick="onTabClick" />
+      <Transition name="fade" mode="out-in">
+        <div class="content content__all" v-if="currentTab == 'Все котики'">
+          <TransitionGroup name="list">
+            <CatCard
+              v-for="(cat, i) in allCats"
+              :key="i"
+              :cat="cat"
+              @heartClick="onHeartClick"
+              :isFeatured="isCatFeatured(cat)"
+            />
+          </TransitionGroup>
+        </div>
+        <div class="content content__featured" v-else>
+          <div class="notification" v-if="featuredCats.length == 0">
+            <p>Коллекция любимых котиков не найдена.</p>
+            <p>:с</p>
+          </div>
+          <TransitionGroup name="list">
+            <CatCard
+              v-for="(cat, i) in featuredCats"
+              :key="i"
+              :cat="cat"
+              @heartClick="onHeartClick"
+              :isFeatured="isCatFeatured(cat)"
+          /></TransitionGroup>
+        </div>
+      </Transition>
+      <div class="load-cats" v-if="isLoadingCats">
+        <p>...загружаем еще котиков...</p>
+        <Loader />
       </div>
-      <CatCard
-        v-for="(cat, i) in featuredCats"
-        :key="i"
-        :cat="cat"
-        @heartClick="onHeartClick"
-        :isFeatured="isCatFeatured(cat)"
-      />
     </div>
-    </Transition>
-    <div class="load-cats" v-if="isLoadingCats">
-      <p>...загружаем еще котиков...</p>
-      <Loader />
-    </div>
-  </div>
   </Transition>
 
   <div class="load-page" v-if="isLoadingPage">
@@ -164,16 +167,49 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 body {
   margin: 0px;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 14px;
 }
 </style>
 
 <style lang="scss" scoped>
+@media only screen and (max-width: 899px) {
+  .cat-card {
+    width: 150px;
+    height: 150px;
+    margin: 4px;
+  }
+
+  .content {
+    padding: 24px 10px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .cat-card {
+    width: 90px;
+    height: 90px;
+    margin: 4px;
+  }
+
+  .content {
+    padding: 24px 10px;
+  }
+}
+
+@media only screen and (min-width: 900px) {
+  .content {
+    padding: 24px 38px;
+  }
+
+  .cat-card {
+    margin: 12px;
+  }
+}
 .main-page {
   position: relative;
   display: flex;
@@ -189,11 +225,7 @@ body {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    padding: 24px 38px;
-
-    .cat-card {
-      margin: 12px;
-    }
+    // padding: 24px 38px;
   }
 
   .load-cats {
@@ -235,6 +267,8 @@ body {
   }
 }
 
+
+//1
 .fade-main-enter-active,
 .fade-main-leave-active {
   transition: opacity 0.5s ease;
@@ -245,6 +279,8 @@ body {
   opacity: 0;
 }
 
+
+//2
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
@@ -254,4 +290,26 @@ body {
 .fade-leave-to {
   opacity: 0;
 }
+
+
+//3
+.list-move,
+.list-enter-active,
+.list-leave-to,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.list-leave-to,
+.list-leave-active {
+  opacity: 0;
+  position: absolute;
+  transform: translateX(30px);
+}
+
 </style>

@@ -38,8 +38,8 @@ export default {
   position: relative;
 
   .img-wrapper {
-    width: 225px;
-    height: 225px;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     outline: white 16px solid;
     display: flex;
@@ -71,7 +71,11 @@ export default {
     left: 0;
     width: 100%;
     height: 94px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 58.85%);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0) 0%,
+      #ffffff 58.85%
+    );
     opacity: 0;
     transition: all ease-in-out 0.2s;
   }
