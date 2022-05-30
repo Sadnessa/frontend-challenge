@@ -177,6 +177,18 @@ body {
 </style>
 
 <style lang="scss" scoped>
+@media only screen and (max-width: 500px) {
+  .cat-card {
+    width: 90px;
+    height: 90px;
+    margin: 4px;
+  }
+
+  .content {
+    padding: 24px 15px;
+  }
+}
+
 @media only screen and (max-width: 899px) {
   .cat-card {
     width: 150px;
@@ -189,17 +201,7 @@ body {
   }
 }
 
-@media only screen and (max-width: 500px) {
-  .cat-card {
-    width: 90px;
-    height: 90px;
-    margin: 4px;
-  }
 
-  .content {
-    padding: 24px 10px;
-  }
-}
 
 @media only screen and (min-width: 900px) {
   .content {
