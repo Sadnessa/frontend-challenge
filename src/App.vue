@@ -1,7 +1,8 @@
 <template>
+<Transition name="fade-main" appear>
   <div class="main-page">
     <Header :tabs="tabs" :activeTab="currentTab" @tabClick="onTabClick" />
-
+    <Transition name="fade" mode="out-in">
     <div class="content content__all" v-if="currentTab == 'Все котики'">
       <CatCard
         v-for="(cat, i) in allCats"
@@ -24,11 +25,13 @@
         :isFeatured="isCatFeatured(cat)"
       />
     </div>
+    </Transition>
     <div class="load-cats" v-if="isLoadingCats">
       <p>...загружаем еще котиков...</p>
       <Loader />
     </div>
   </div>
+  </Transition>
 
   <div class="load-page" v-if="isLoadingPage">
     <Loader />
@@ -230,5 +233,25 @@ body {
       margin-bottom: 10px;
     }
   }
+}
+
+.fade-main-enter-active,
+.fade-main-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-main-enter-from,
+.fade-main-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
